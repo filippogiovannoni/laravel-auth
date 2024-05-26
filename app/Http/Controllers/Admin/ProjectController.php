@@ -6,6 +6,7 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -14,7 +15,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return view('admin.projects.index', ['projects' => Project::all()]);
+        return view('admin.projects.index', ['projects' => Project::orderByDesc('id')->paginate(8)]);
     }
 
     /**
@@ -30,7 +31,29 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // validate
+        $val_data = $request->validate([
+            'name' => 'required|max:50',
+            'language' => 'nullable|max:20',
+            'description' => 'nullable',
+            'cover_image' => 'nullable|image|max:500'
+        ]);
+
+        $val_data['slug'] = Str::slug($request->name, '-');
+
+
+        if ($request->has('cover_image')) {
+            // add cover image
+            $val_data['cover_image'] = Storage::put('uploads', $request->cover_image);
+        }
+
+        // dd($val_data);
+
+        //create 
+        Project::create($val_data);
+
+        //redirect
+        return to_route('admin.projects.index')->with('message', 'Project created with success!');
     }
 
     /**

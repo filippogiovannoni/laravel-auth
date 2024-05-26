@@ -26,7 +26,12 @@
                     @forelse ($projects as $project)
                         <tr class="">
                             <td scope="row">
-                                <img width="150" src="{{ $project->cover_image }}" alt="cover_image">
+                                @if (Str::startsWith($project->cover_image, 'https://'))
+                                    <img width="150" src="{{ $project->cover_image }}" alt="cover_image">
+                                @else
+                                    <img width="150" src="{{ asset('storage/' . $project->cover_image) }}"
+                                        alt="cover_image">
+                                @endif
                             </td>
                             <td>{{ $project->name }}</td>
                             <td>{{ $project->language }}</td>
@@ -44,5 +49,6 @@
                 </tbody>
             </table>
         </div>
+        {{ $projects->links('pagination::bootstrap-5') }}
     </div>
 @endsection

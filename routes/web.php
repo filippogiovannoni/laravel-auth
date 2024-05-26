@@ -29,8 +29,10 @@ Route::middleware(['auth', 'verified'])
 
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // CRUD
-        Route::resource('projects', ProjectController::class);
+        // CRUD - Rename the URL with slug
+        Route::resource('projects', ProjectController::class)->parameters([
+            'projects' => 'project:slug'
+        ]);
     });
 
 
