@@ -69,7 +69,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -77,7 +77,36 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        //validate
+        $val_data = $request->validate([
+            'name' => 'required|max:50',
+            'language' => 'nullable|max:20',
+            'description' => 'nullable',
+            'cover_image' => 'nullable|image|max:500'
+        ]);
+
+        $val_data['slug'] = Str::slug($request->name, '-');
+
+        /// If the request contains the cover_image
+        if ($request->has('cover_image')) {
+            /// If the project has the cover_image
+            if ($project->cover_image) {
+
+                //Delete the cover image from the storage
+                Storage::delete($project->cover_image);
+            }
+        }
+
+        //upload the new image
+        $img_path = Storage::put('uploads', $request->cover_image);
+        $val_data['cover_image'] = $img_path;
+
+        //update
+        $project->update($val_data);
+
+        //redirect
+
+        return to_route('admin.projects.index')->with('message', 'Project updated with success!');
     }
 
     /**

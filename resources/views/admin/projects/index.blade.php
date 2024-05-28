@@ -6,8 +6,16 @@
             <h2 class="py-2">Projects</h2>
             <a name="createProject" id="createProject" class="btn btn-primary my-3" href="{{ route('admin.projects.create') }}"
                 role="button">Create</a>
-
         </div>
+
+        <div class="container">
+            @if (session('message'))
+                <div class="alert alert-success" role="alert">
+                    <strong>Congratulations!</strong> {{ session('message') }}
+                </div>
+            @endif
+        </div>
+
 
     </div>
     <div class="container">
@@ -38,6 +46,7 @@
                             <td>{{ $project->slug }}</td>
                             <td>
                                 <a href="{{ route('admin.projects.show', $project) }}">View</a>
+                                <a href="{{ route('admin.projects.edit', $project) }}">Edit</a>
                             </td>
                         </tr>
 
