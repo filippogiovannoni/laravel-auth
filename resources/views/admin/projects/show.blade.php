@@ -4,7 +4,7 @@
     <header class="bg-dark text-white py-4">
         <div class="container d-flex justify-content-between align-items-center">
             <h1>
-                {{ $project->name }}
+                Project: {{ $project->name }}
             </h1>
             <a class="btn btn-primary" href="{{ route('admin.projects.index') }}">
                 <i class="fas fa-chevron-left fa-sm fa-fw"></i> Go Back</a>
@@ -29,7 +29,12 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <img class="card-img-top" src="{{ $project->cover_image }}" alt="cover_image">
+                    @if (Str::startsWith($project->cover_image, 'https://'))
+                        <img width="150" class="card-img-top" src="{{ $project->cover_image }}" alt="cover_image">
+                    @else
+                        <img width="150" class="card-img-top" src="{{ asset('storage/' . $project->cover_image) }}"
+                            alt="cover_image">
+                    @endif
                 </div>
             </div>
         </div>

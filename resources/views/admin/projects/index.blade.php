@@ -44,10 +44,23 @@
                             <td>{{ $project->name }}</td>
                             <td>{{ $project->language }}</td>
                             <td>{{ $project->slug }}</td>
-                            <td>
-                                <a href="{{ route('admin.projects.show', $project) }}">View</a>
-                                <a href="{{ route('admin.projects.edit', $project) }}">Edit</a>
-                            </td>
+                            <div>
+                                <td class="d-flex align-items-center border-0 gap-3">
+
+                                    <a class="btn btn-sm btn-primary" href="{{ route('admin.projects.show', $project) }}">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-secondary" href="{{ route('admin.projects.edit', $project) }}">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
+                                    <form action="{{ route('admin.projects.destroy', $project) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash"
+                                                aria-hidden="true"></i></button>
+                                    </form>
+                                </td>
+                            </div>
                         </tr>
 
                     @empty
